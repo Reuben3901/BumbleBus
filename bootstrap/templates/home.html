@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+	<h1>Home Page Template</h1>
+
+	<br>
+
+	{% for post in posts %}
+		{% if post.postType == 'blog' %}
+			<article class="content-section" style="background-color: #C6BE90;">
+		{% else %}
+			<article class="content-section" style="background-color: #AAC6C3;">
+		{% endif %}		
+			<div class="row media">
+
+				<img class="col-md-4 media-body rounded-circle article-img p-0" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}" style="">
+				<div class="col-md-8 media-body">
+					<div class=" row article-metadata ">
+						<a class="mr-2 col-md-auto" href="#">{{ post.author.username }}</a>
+						<p class="text-muted col-md-auto m-0 p-0">{{ post.date_posted.strftime('%B %d, %Y') }}</p>
+						{% if post.pinned %}
+							<i class="bi bi-pin-angle-fill col-md-auto text-end"></i>
+						{% endif %}
+					</div>
+					<h2><a class="article-title pt-0" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
+					<p class="article-content text-truncate">{{ post.content }}</p>
+				</div>
+			</div>
+		</article>
+	{% endfor %}
+
+	<br>
+	
+{% endblock %}

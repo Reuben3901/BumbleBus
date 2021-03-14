@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<div class="content-section">
+		<div class="row justify-content-center">
+			<div class="col-md-4" style="background-color: #fff;" >
+				<!-- action will POST the information to the same route that we are currently on -->
+				<form method="POST" action="">
+					<!-- creates the CSRF token, cross site request forgery -->
+					{{ form.hidden_tag() }}
+					<fieldset class="form-group">
+						<legend class="border-bottom mb-4">Login</legend>
+						<div class="form-group">
+							{{ form.email.label(class="form-control-label") }}
+							{{ form.email(class="form-control form-control-lg") }}
+						</div>
+						<div class="form-group">
+							{{ form.password.label(class="form-control-label mt-1") }}
+							{{ form.password(class="form-control form-control-lg") }}
+						</div>
+
+						<div class="form-check">
+							{{ form.remember(class="form-check-input") }}
+							{{ form.remember.label(class="form-check-label mt-1") }}
+						</div>
+					</fieldset>
+					<div class="form-group mb-1">
+						{{ form.submit(class="btn btn-outline-info mt-3" ) }}
+					</div>
+					<small class="text-muted ml-2 ">
+						<a href="#">Fogot Password?</a>
+					</small>
+				</form>
+
+				<div class="border-top mt-1 pt-1 pb-2">
+					<small class="text-muted">
+						Don't have an Account? <a class="ml-2" href="{{ url_for('register') }}">Register</a>
+					</small>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	
+{% endblock %}

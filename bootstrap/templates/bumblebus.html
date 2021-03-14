@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+	<div class="row  mx-auto border-0 ">
+		<div class="col-md-7 mt-1" >
+			<div class="container ps-0" >
+				<div class="row d-flex justify-content-start">
+					<div class="col-md-12 align-self-start" style="background-color: #AAC6C3;">	
+				{% for post in posts %}
+				
+						
+					{% if post.pinned and post.postType=='vlog' and post.published %}
+						<h2 class="text-center">{{ post.title }}</h2>	
+						<div class="ratio ratio-16x9">
+							<iframe class="rounded" src="{{ post.content | safe }}" allowfullscreen></iframe>
+						</div>
+						<div>
+							<p >{{ post.summary }}</p>
+						</div> 
+					{% endif %}
+					
+			{% endfor %}
+			</div>
+				</div>
+			</div>
+		</div> <!-- Pinned Vlog -->
+
+		<div class="col-md-5 mt-1 " style="background-color: #C6BE90;">
+			<div class="container pe-0" >
+				<div class="row d-flex justify-content-end">
+					<div class="col-md-12 align-self-end" >	
+						<h2 class="text-center p-2">The Bumblebus Blog</h2>
+						{% for post in posts %}
+							{% if post.published and post.pinned and post.postType=='blog' %}
+								<article class=" row media content-section border-0 pt-0 pb-0 " style="background-color: #C6BE90;">
+									<div class="media-body col-md-4">
+										<img class="rounded img-fluid mb-3 p-0"  src="{{ url_for('static', filename='blog_pics/' + post.thumbnail) }}" >
+									</div>
+									<div class="media-body col-md-8">
+										<h5 class="text-break"><a class="article-title text-decoration-none" href="#">{{ post.title }}</a></h5>
+										<p class="article-content text-break">{{ post.summary }}</p>
+									</div>  <!-- media-body -->
+									<div class="media-body">
+										{% if post != lastPinnedPost  %}
+											<hr style="width:85%;height:2px; text-align:left;color: #594E42;opacity: 100%"> <!-- 5f5446 -->
+										{% endif %}
+									</div>
+								</article>
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div> <!-- Pinned Blog -->
+
+	</div> <!-- End Pinned Sections -->
+
+	<br>
+
+	<!-- Subscribe Bar Section -->	
+	<div class="row content-section mx-auto p-0 border-0" style="background-color: #E1D9CC;">
+		<div class="col" >
+			<form method="POST" action="">
+			<!-- creates the CSRF token, cross site request forgery -->
+				<fieldset class="form-group p-3">
+					<div class="form-group float-end">
+						<input type="text" id="fname" name="fname" class="border-1 m-1 p-1 align-middle">
+						<a class="btn btn-primary btn-sm m-1 " href="#">Get Email Updates</a>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div> <!-- row Subscribe Section -->
+
+	<br>
+
+	<!-- Unpinned Posts -->
+	<div class="album py-5 ">
+		<div class="container">
+			<div class="row">
+
+			{% for post in posts %}
+			{% if not post.pinned and post.published %}
+
+				<div class="col-md-4">
+
+				{% if post.postType == 'blog' %}
+					<div class="card mb-4 box-shadow" style="background-color: #C6BE90; ">
+						<img class="card-img-top border-bottom border-secondary" src="{{ url_for('static', filename='blog_pics/' + post.thumbnail) }}" alt="Card image cap" style="height:18rem;">
+				{% else %}
+					<div class="card mb-4 box-shadow" style="background-color: #AAC6C3;">
+						<div class="card-img-top border-bottom border-secondary position-relative" style="height:18rem;background-color: #000;" >
+							<div class="ratio ratio-16x9 position-absolute top-50 start-50 translate-middle" >
+								<iframe class="rounded" src="{{ post.content | safe }}" allowfullscreen></iframe>
+							</div>
+						</div>
+				{% endif %}	
+						<div class="card-body">
+						{% if post.postType == 'blog' %}
+							<h3 class="card-text text-center">{{ post.title }}</h3>
+							<p class="card-text" >{{ post.content|striptags|truncate(150) }}</p>
+						{% else %}
+							<h3 class="card-text text-center">{{ post.title }}</h3>
+							<p class="card-text" >{{ post.summary }}</p>
+						{% endif %}
+						</div>
+					</div>
+					</div>
+				{% endif %}
+				{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div> <!-- unpinned posts -->
+
+
+
+{% endblock %}
