@@ -29,7 +29,6 @@ from flask import abort
 # ]
 
 @app.route("/")
-@app.route("/home")
 def home():
 	posts = Post.query.all()
 	lastPinnedPost = None
@@ -104,10 +103,6 @@ def save_profile_picture(form_picture):
 	new_img.save(picture_path)  
 
 	return picture_filename
-
-
-
-
 
 
 def save_blog_image(form_picture):
@@ -191,6 +186,26 @@ def post(post_id):
 		return redirect(url_for('home'))
 	
 	return render_template('post.html', title=post.title, post=post)#, form=form)
+
+
+@app.route("/postmd/<int:post_id>", methods=['GET', 'POST'])
+def postmd(post_id):
+	post = Post.query.get_or_404(post_id)
+
+	form = PostForm()
+	if form.validate_on_submit():	
+		#post = Post(title=form.title.data, content=form.content.data, pinned=((False, True) [request.form.get('mycheckbox') == '1']))
+		# use the backref of author instead of setting a user id
+		post = Post(title=form.title.data, content=form.content.data, author=current_user)
+		db.session.add(post)
+		db.session.commit()
+		#current_user.username = form.title.data
+		#current_user.username = form.content.data
+		flash(f'Your post has been created!', 'success')
+		# POST-GET redirect pattern
+		return redirect(url_for('home'))
+	
+	return render_template('post_markdown.html', title=post.title, post=post)#, form=form)
 
 
 @app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])

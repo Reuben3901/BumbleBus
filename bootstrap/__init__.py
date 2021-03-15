@@ -10,6 +10,9 @@ from flask_login import LoginManager
 # Import forms from forms.py
 #from forms import RegistrationForm, LoginForm
 
+from flaskext.markdown import Markdown
+
+
 app = Flask(__name__)
 
 #import secrets
@@ -30,6 +33,8 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 # Styles the please log in to access this page message
 login_manager.login_message_category = 'info'
+
+Markdown(app)
 
 from bootstrap import routes
 
