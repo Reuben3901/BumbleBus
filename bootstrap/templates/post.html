@@ -67,9 +67,9 @@
 					</div>
 					<h2><a class="article-title pt-0" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
 					{% if post.postType == 'blog' %}
-					<p class="article-content text-truncate">{{ post.content }}</p>
+					<p class="article-content text-truncate">{{ post.content | safe }}</p>
 					{% else %}
-					<p class="article-content text-truncate">{{ post.summary }}</p>
+					<p class="article-content text-truncate">{{ post.summary | safe }}</p>
 					{% endif %}
 				</div>
 			</div>
