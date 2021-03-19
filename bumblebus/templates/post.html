@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 
+
 {% block content %}
-	
-	{% for post in posts %}
+
+	<h1>Post Template</h1>
+
+	<br>
+
+
+
 		<div class="row mx-auto justify-content-center">
 			
 		{% if post.postType == 'blog' %}
@@ -59,42 +65,17 @@
 						<button type="button" class="btn btn-danger btn-sm m-1 " data-bs-toggle="modal" data-bs-target="#deleteModal{{ post.id }}">Delete</button>
 						</div>
 					</div>
-					<h2><a class="article-title pt-0" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
-					<p class="article-content text-truncate">{{ post.content }}</p>
-					<p class="article-content text-truncate">{{ post.summary }}</p>
+					<h1 class="text-center pt-0">{{ post.title }}</h1>
+					{% if post.postType == 'blog' %}
+					<p class="article-content text-truncate">{{ post.content | safe }}</p>
+					{% else %}
+					<p class="article-content text-truncate">{{ post.summary | safe }}</p>
+					{% endif %}
 				</div>
 			</div>
 		</article>
 	</div>
 	</div>
-	<br>
-
-
-	<!-- Modal -->
-	<div class="modal fade" id="deleteModal{{ post.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ post.id }}" aria-hidden="true">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="deleteModalLabel{{ post.id }}">Confirm Deletion</h5>
-	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-	      </div>
-	      <div class="modal-body">
-	        Are you sure you want to delete this post? This cannot be undone.
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-	        
-	      	<form action="{{ url_for('post_delete', post_id=post.id) }}" method="POST">
-	      		<input type="Submit" class="btn btn-danger" value="Delete Post">
-	      	</form>
-
-	      </div>
-	    </div>
-	  </div>
-	</div>
-
-	{% endfor %}
-
-	<br>
 	
+
 {% endblock %}

@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect
-from bootstrap import app, db, bcrypt
-from bootstrap.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
-from bootstrap.models import User, Post
+from bumblebus import app, db, bcrypt
+from bumblebus.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
+from bumblebus.models import User, Post
 from flask_login import login_user, current_user # check login status
 from flask_login import logout_user
 from flask_login import login_required # restrict route to logged in users
@@ -12,7 +12,7 @@ import secrets
 import os
 # resizing the photo
 from PIL import Image
-from flask import abort 
+
 # posts = [
 # 	{
 # 		'author':'Jane Doe',
@@ -29,20 +29,23 @@ from flask import abort
 # ]
 
 @app.route("/")
+@app.route("/home")
 def home():
 	posts = Post.query.all()
-	lastPinnedPost = None
-	if len(posts) > 0:
-		for post in posts:
-			if post.published and post.postType == 'blog' and post.pinned == True:
-				lastPinnedPost = post
+	return render_template('home.html', title="Homepage", posts=posts)
 
-	return render_template('bumblebus.html', title="Bumblebus", posts=posts, lastPinnedPost=lastPinnedPost)
+@app.route("/about")
+def about():
+	return render_template('about.html', title="About")
 
-@app.route("/bootstrap")
-def bootstrap():
-	return render_template('bootstrap.html', title="Bootstrap", posts=posts)
+@app.route("/bumblebus")
+def bumblebus():
+	return render_template('bumblebus.html', title="bumblebus", posts=posts)
 
+@app.route("/bumblebus")
+def bumblebus():
+	posts = Post.query.all()
+	return render_template('bumblebus.html', title="bumblebus", posts=posts)
 
 @app.route("/register", methods=['GET','POST'])
 def register():
@@ -105,56 +108,92 @@ def save_profile_picture(form_picture):
 	return picture_filename
 
 
-def save_blog_image(form_picture):
-	random_hex = secrets.token_hex(8)
-	
-	_, filename_ext = os.path.splitext(form_picture.filename)
-	picture_filename = random_hex + filename_ext
-	picture_path = os.path.join(app.root_path, 'static/blog_pics', picture_filename)
-	form_picture.save(picture_path)
-	print("blog_image saved")
-	
-	return picture_filename
+@app.route("/account", methods=['GET','POST'])
+@login_required # need to tell where the login view is located.. inside init
+def account():
+	image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+	form = UpdateAccountForm()
 
-def save_blog_thumbnail(form_picture):
-	random_hex = secrets.token_hex(8)
+	if form.validate_on_submit():
+		if form.picture.data:
+			picture_file = save_profile_picture(form.picture.data)
+			if current_user.image_file != 'default.jpg':
+				previous_image = os.path.join(app.root_path, 'static/profile_pics', current_user.image_file)
+				os.remove(previous_image)
+			current_user.image_file = picture_file
 	
+		current_user.username = form.username.data
+		current_user.email = form.email.data
+		db.session.commit()
+		flash(f'Your account has been updated!', 'success')
+		# POST-GET redirect pattern
+		return redirect(url_for('account'))
+	elif request.method == 'GET':
+		form.username.data = current_user.username
+		form.email.data = current_user.email
+	return render_template('account.html', title="Account", image_file=image_file, form=form)#, form=form)
+
+
+
+def save_blog_picture(form_picture):
+	random_hex = secrets.token_hex(8)
+	#f_name, f_ext = os.path.splitext(form_picture.filename)
+	# a  variable to throw away, does not get ide error for unused variable
 	_, filename_ext = os.path.splitext(form_picture.filename)
 	picture_filename = random_hex + filename_ext
-	picture_path = os.path.join(app.root_path, 'static/blog_pics', picture_filename)
+	picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_filename)
 	
 	output_size = (640,640)
 	new_img = Image.open(form_picture)
 	new_img.thumbnail(output_size)	
+
 	new_img.save(picture_path)  
-	print("thumnail saved")
 
 	return picture_filename
+
+
+@app.route("/account", methods=['GET','POST'])
+@login_required # need to tell where the login view is located.. inside init
+def account():
+	
+	if form.validate_on_submit():
+		if form.picture.data:
+			picture_file = save_blog_picture(form.picture.data)
+			if current_user.image_file != 'default.jpg':
+				previous_image = os.path.join(app.root_path, 'static/profile_pics', current_user.image_file)
+				os.remove(previous_image)
+			current_user.image_file = picture_file
+	
+		current_user.username = form.username.data
+		current_user.email = form.email.data
+		db.session.commit()
+		flash(f'Your account has been updated!', 'success')
+		# POST-GET redirect pattern
+		return redirect(url_for('account'))
+	elif request.method == 'GET':
+		form.username.data = current_user.username
+		form.email.data = current_user.email
+	return render_template('account.html', title="Account", image_file=image_file, form=form)#, form=form)
+
 
 @app.route("/post/new", methods=['GET', 'POST'])
 @login_required
 def post_new():
-
+	image_file = url_for('static', filename='blog_pics/' + current_user.image_file)
+	
 	form = PostForm()
 	if form.validate_on_submit():
 		if form.picture.data:
-			image_file = save_blog_image(form.picture.data)
-			thumbnail = save_blog_thumbnail(form.picture.data)
-			# INCLUDE THIS IS THE UPDATE!!!!!!!!!!
+			thumbnail = save_blog_picture(form.picture.data)
 			# if current_user.image_file != 'blog_default.jpg':
 			# 	previous_image = os.path.join(app.root_path, 'static/blog_pics', current_user.image_file)
 			# 	os.remove(previous_image)
-			post = Post(title=form.title.data, content=form.content.data, summary=form.summary.data,
-						author=current_user, image_file=image_file, thumbnail=thumbnail,
-						pinned=form.pinned.data, postType=form.postType.data, published=form.published.data)
+			current_user.image_file = picture_file
+			post = Post(title=form.title.data, content=form.content.data, author=current_user, image_file=form.picture.data, thumbnail=thumbnail)
 		#post = Post(title=form.title.data, content=form.content.data, pinned=((False, True) [request.form.get('mycheckbox') == '1']))
 		# use the backref of author instead of setting a user id
 		else:
-			print("this is postType:", form.postType.data)
-			print("this is title:", form.title.data)
-			
-			post = Post(title=form.title.data, content=form.content.data, summary=form.summary.data,
-						author=current_user, pinned=form.pinned.data, postType=form.postType.data, published=form.published.data)
+			post = Post(title=form.title.data, content=form.content.data, author=current_user)
 		db.session.add(post)
 		db.session.commit()
 		#current_user.username = form.title.data
@@ -162,13 +201,16 @@ def post_new():
 		flash(f'Your post has been created!', 'success')
 		# POST-GET redirect pattern
 		return redirect(url_for('home'))
-	elif request.method == 'GET':
-		form.postType.data = 'blog'
 	
-	return render_template('create_post.html', title="Create Post", form=form, legend='Create A New Post')
+	return render_template('create_post.html', title="Create Post", form=form)#, form=form)
+
+
+
+
 
 
 @app.route("/post/<int:post_id>", methods=['GET', 'POST'])
+@login_required
 def post(post_id):
 	post = Post.query.get_or_404(post_id)
 
@@ -186,85 +228,3 @@ def post(post_id):
 		return redirect(url_for('home'))
 	
 	return render_template('post.html', title=post.title, post=post)#, form=form)
-
-
-@app.route("/postmd/<int:post_id>", methods=['GET', 'POST'])
-def postmd(post_id):
-	post = Post.query.get_or_404(post_id)
-
-	form = PostForm()
-	if form.validate_on_submit():	
-		#post = Post(title=form.title.data, content=form.content.data, pinned=((False, True) [request.form.get('mycheckbox') == '1']))
-		# use the backref of author instead of setting a user id
-		post = Post(title=form.title.data, content=form.content.data, author=current_user)
-		db.session.add(post)
-		db.session.commit()
-		#current_user.username = form.title.data
-		#current_user.username = form.content.data
-		flash(f'Your post has been created!', 'success')
-		# POST-GET redirect pattern
-		return redirect(url_for('home'))
-	
-	return render_template('post_markdown.html', title=post.title, post=post)#, form=form)
-
-
-@app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
-@login_required
-def post_update(post_id):
-	post = Post.query.get_or_404(post_id)
-
-	if post.author != current_user:
-		abort(403)
-
-	form = PostForm()
-
-	if form.validate_on_submit():	
-		#post = Post(title=form.title.data, content=form.content.data, pinned=((False, True) [request.form.get('mycheckbox') == '1']))
-		# use the backref of author instead of setting a user id
-		postType 	 = form.postType.data
-		post.title 	 = form.title.data
-		post.content = form.content.data
-		post.summary = form.summary.data
-		post.pinned  = form.pinned.data
-		post.published  = form.published.data
-		db.session.commit()
-		#current_user.username = form.title.data
-		#current_user.username = form.content.data
-		flash(f'Your post has been updated!', 'success')
-		# POST-GET redirect pattern
-		return redirect(url_for('post', post_id=post.id))
-	elif request.method == 'GET':
-		form.postType.data = post.postType
-		form.title.data    = post.title
-		form.content.data  = post.content
-		form.summary.data  = post.summary
-		form.pinned.data   = post.pinned
-		form.published.data   = post.published
-
-		# Need to show if pinned is checked
-	
-	return render_template('create_post.html', title="Update Post", form=form, legend='Update Post') # Shares template with post_new
-
-@app.route("/post/<int:post_id>/delete", methods=['POST'])
-@login_required
-def post_delete(post_id):
-	post = Post.query.get_or_404(post_id)
-
-	post = Post.query.get_or_404(post_id)
-
-	if post.author != current_user:
-		abort(403)
-
-	db.session.delete(post)
-	db.session.commit()
-	flash(f'Your post has been Deleted!', 'success')
-	return redirect(url_for('posts'))
-
-
-
-
-@app.route("/posts/")
-@login_required
-def posts():
-	posts = Post.query.all()
-	return render_template('posts.html', title="All Posts", posts=posts)

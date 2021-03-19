@@ -65,7 +65,7 @@
 						<button type="button" class="btn btn-danger btn-sm m-1 " data-bs-toggle="modal" data-bs-target="#deleteModal{{ post.id }}">Delete</button>
 						</div>
 					</div>
-					<h2><a class="article-title pt-0" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
+					<h1 class="text-center pt-0">{{ post.title }}</h1>
 					{% if post.postType == 'blog' %}
 					<p class="article-content text-truncate">{{ post.content | markdown }}</p>
 					{% else %}

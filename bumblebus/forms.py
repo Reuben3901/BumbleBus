@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, RadioField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 # Used for validation purposes
-from bootstrap.models import User
+from bumblebus.models import User
 # Used to check if username has change since or form queries the db for emails that already exist
 from flask_login import current_user
 # FileAllowed allows us to control what type of files are allowed to be uploaded

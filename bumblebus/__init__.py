@@ -36,6 +36,6 @@ login_manager.login_message_category = 'info'
 
 Markdown(app)
 
-from bootstrap import routes
+from bumblebus import routes
 
 	

@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+	<div class="row  mx-auto border-0 ">
+		<div class="col-md-7 mt-1" >
+			<div class="container ps-0" >
+				<div class="row d-flex justify-content-start">
+					<div class="col-md-12 align-self-start" style="{{vlogpostcolor}}">	
+				{% for post in posts %}
+				
+						
+					{% if post.pinned and post.postType=='vlog' and post.published %}
+						<h2 class="text-center">{{ post.title }}</h2>	
+						<div class="ratio ratio-16x9">
+							<iframe class="rounded" src="{{ post.content | safe }}" allowfullscreen></iframe>
+						</div>
+						<div>
+							<p >{{ post.summary }}</p>
+						</div> 
+					{% endif %}
+					
+			{% endfor %}
+			</div>
+				</div>
+			</div>
+		</div> <!-- Pinned Vlog -->
+
+		<div class="col-md-5 mt-1 " style="{{blogpostcolor}}">
+			<div class="container pe-0" >
+				<div class="row d-flex justify-content-end">
+					<div class="col-md-12 align-self-end" >	
+						<h2 class="text-center p-2">The Bumblebus Blog</h2>
+						{% for post in posts %}
+							{% if post.published and post.pinned and post.postType=='blog' %}
+							<a class="article-title bumblebus-anchor" href="{{ url_for('post', post_id=post.id) }}">
+								<article class=" row media content-section border-0 pt-0 pb-0 " style="{{blogpostcolor}}">
+									<div class="media-body col-md-4">
+										<img class="rounded img-fluid mb-3 p-0"  src="{{ url_for('static', filename='blog_pics/' + post.thumbnail) }}" >
+									</div>
+									<div class="media-body col-md-8">
+										<h5 class="text-break">{{ post.title }}</h5>
+										<p class="article-content text-break">{{ post.summary }}</p>
+									</div>  <!-- media-body -->		
+								</article>
+							</a>
+
+								{% if post != lastPinnedPost  %}
+									<div class="media-body mb-4 mt-3">
+										<hr style="width:85%;height:2px; text-align:left;color: #594E42;opacity: 100%"> <!-- 5f5446 -->
+									</div>
+									{% endif %}
+									
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div> <!-- Pinned Blog -->
+
+	</div> <!-- End Pinned Sections -->
+
+	<br>
+
+	<!-- Subscribe Bar Section #f5a400 -->	
+	<div class="row mx-auto  border-0 align-items-center" style="background-color: #E1D9CC ;">
+		
+		<div class="col-auto ms-auto">
+			<h2 class="text-center align-middle">JOIN OUR FREE MONTHLY NEWSLETTER</h2>
+		</div>
+		<div class="col-auto ms-auto" >
+			<form method="POST" action="">
+			<!-- creates the CSRF token, cross site request forgery -->
+				<fieldset class="form-group p-3">
+					<div class="form-group float-end">
+						<input type="text" id="fname" name="fname" class="border-1 m-1 p-1 align-middle">
+						<a class="btn btn-primary btn-sm m-1 " href="#">Get Email Updates</a>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div> <!-- row Subscribe Section -->
+
+	<br>
+
+	<!-- Unpinned Posts -->
+	<div class="album py-5 ">
+		<div class="container">
+			<div class="row">
+
+			{% for post in posts %}
+				{% if not post.pinned and post.published %}
+
+					<div class="col-md-4">
+						<a class="bumblebus-anchor" href="{{ url_for('post', post_id=post.id) }}">
+
+						{% if post.postType == 'blog' %}
+							<div class="card mb-4 box-shadow" style="{{blogpostcolor}}">
+								<img class="card-img-top border-bottom border-secondary" src="{{ url_for('static', filename='blog_pics/' + post.thumbnail) }}" alt="Card image cap" style="height:18rem;">
+						{% else %}
+							<div class="card mb-4 box-shadow"style="{{vlogpostcolor}}">
+								<div class="card-img-top border-bottom border-secondary position-relative" style="height:18rem; background-color: #000;" >
+									<div class="ratio ratio-16x9 position-absolute top-50 start-50 translate-middle" >
+										<iframe class="rounded" src="{{ post.content | safe }}" allowfullscreen></iframe>
+									</div>
+								</div>
+						{% endif %}	
+								<div class="card-body ">
+								{% if post.postType == 'blog' %}
+									<h3 class="card-text text-center">{{ post.title }}</h3>
+									<p class="card-text" >{{ post.summary|striptags|truncate(100) }}</p>
+								{% else %}
+									<h3 class="card-text text-center">{{ post.title }}</h3>
+									<p class="card-text" >{{ post.summary }}</p>
+								{% endif %}
+								</div>
+							</div>
+						</a>
+					</div>
+				{% endif %}
+			{% endfor %}
+				
+			</div>
+		</div>
+	</div> <!-- unpinned posts -->
+
+
+<!-- Flipping Cards -->
+	<div class="album py-5 ">
+		<div class="container">
+			<div class="row">
+
+			{% for post in posts %}
+				{% if not post.pinned and post.published %}
+
+					<div class="col-md-4 ">
+						<div class="card-container position-relative">
+						
+							<a class="bumblebus-anchor" href="{{ url_for('post', post_id=post.id) }}">
+
+								<!-- The Front of the Card -->
+							{% if post.postType == 'blog' %}
+								<div class="card mb-4 box-shadow card-front" style="{{blogpostcolor}}">
+									<img class="card-img-top border-bottom border-secondary" src="{{ url_for('static', filename='blog_pics/' + post.thumbnail) }}" alt="Card image cap" style="height:18rem;">
+							{% else %}
+								<div class="card mb-4 box-shadow card-front"style="{{vlogpostcolor}}">
+									<div class="card-img-top border-bottom border-secondary position-relative" style="height:18rem; background-color: #000;" >
+										<div class="ratio ratio-16x9 position-absolute top-50 start-50 translate-middle" >
+											<iframe class="rounded" src="{{ post.content | safe }}" allowfullscreen></iframe>
+										</div>
+									</div>
+							{% endif %}	
+									<div class="card-body ">
+									{% if post.postType == 'blog' %}
+										<h3 class="card-text text-center">{{ post.title | truncate(35) }}</h3>
+										<p class="card-text" >{{ post.summary | striptags | truncate(50) }}</p>
+									{% else %}
+										<h3 class="card-text text-center">{{ post.title | truncate(35) }}</h3>
+										<p class="card-text" >{{ post.summary | striptags | truncate(50) }}</p>
+							{% endif %}
+									</div>
+								</div>
+
+								<!-- The Back of the Card -->
+							{% if post.postType == 'blog' %}
+								<div class="card mb-4 box-shadow card-back position-absolute top-0" style="{{blogpostcolor}} height:100%;">
+							{% else %}
+								<div class="card mb-4 box-shadow card-back position-absolute top-0"style="{{vlogpostcolor}} height:100%;">
+									
+							{% endif %}	
+									<div class="card-body" style="overflow:hidden;">
+									{% if post.postType == 'blog' %}
+										<h3 class="card-text text-center">{{ post.title }}</h3>
+										<p class="card-text" >{{ post.content | truncate(600) | markdown }}</p>
+									{% else %}
+										<h3 class="card-text text-center">{{ post.title }}</h3>
+										<p class="card-text" >{{ post.content | striptags | truncate(600) | markdown }}</p>
+							{% endif %}
+									</div>
+								</div>
+
+							</a>
+						</div>
+					</div>
+				{% endif %}
+			{% endfor %}
+				
+			</div>
+		</div>
+	</div> <!-- unpinned posts -->
+
+
+{% endblock %}

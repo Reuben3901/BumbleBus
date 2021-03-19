@@ -1,4 +1,4 @@
-from bootstrap import db, login_manager
+from bumblebus import db, login_manager
 from datetime import datetime
 from flask_login import UserMixin
 
