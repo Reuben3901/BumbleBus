@@ -4,25 +4,33 @@
 
 
 	<div class="row  mx-auto border-0 ">
-		<div class="col-md-7 mt-1" >
-			<div class="container ps-0" >
-				<div class="row d-flex justify-content-start">
-					<div class="col-md-12 align-self-start" style="{{vlogpostcolor}}">	
+		<div class="col-md-7 mt-1 ps-0  " >
+			<div class="container ps-0 pe-0" style="{{vlogpostcolor}} height:100%;" >
+				<div class="row d-flex justify-content-center">
+					<div class="col-md-12 align-self-start" style="">	
+						
 				{% for post in posts %}
 				
 						
 					{% if post.pinned and post.postType=='vlog' and post.published %}
-						<h2 class="text-center">{{ post.title }}</h2>	
-						<div class="ratio ratio-16x9">
-							<iframe class="rounded" src="{{ post.content | safe }}" allowfullscreen></iframe>
+						<h2 class="text-center p-2">{{ post.title }}</h2>	
+
+						<div class="row justify-content-center ">
+							<div class="col-md-10">
+								<div class="ratio ratio-16x9">
+									<iframe class="rounded " src="{{ post.content | safe }}" allowfullscreen></iframe>
+								</div>
+							</div>
 						</div>
+
+						
 						<div>
-							<p >{{ post.summary }}</p>
+							<p class="text-center mt-4">{{ post.summary }}</p>
 						</div> 
 					{% endif %}
 					
 			{% endfor %}
-			</div>
+					</div>
 				</div>
 			</div>
 		</div> <!-- Pinned Vlog -->
@@ -64,7 +72,7 @@
 
 
 	<!-- Subscribe Bar Section #f5a400 -->	
-	<div class="row mx-auto mt-5 align-items-center" style="background-color: #E1D9CC ;">
+	<div class="row mx-auto mt-3 align-items-center" style="background-color: #E1D9CC ;">
 		
 		<div class="col-auto ms-auto">
 			<h2 class="text-center align-middle">JOIN OUR FREE MONTHLY NEWSLETTER</h2>
@@ -83,7 +91,7 @@
 	</div> <!-- row Subscribe Section -->
 
 <!-- Flipping Cards -->
-	<div class="album mt-5 ">
+	<div class="album mt-3 ">
 		<div class="container">
 			<div class="row">
 
