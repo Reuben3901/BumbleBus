@@ -61,10 +61,10 @@
 
 	</div> <!-- End Pinned Sections -->
 
-	<br>
+
 
 	<!-- Subscribe Bar Section #f5a400 -->	
-	<div class="row mx-auto  border-0 align-items-center" style="background-color: #E1D9CC ;">
+	<div class="row mx-auto mt-5 align-items-center" style="background-color: #E1D9CC ;">
 		
 		<div class="col-auto ms-auto">
 			<h2 class="text-center align-middle">JOIN OUR FREE MONTHLY NEWSLETTER</h2>
@@ -82,52 +82,8 @@
 		</div>
 	</div> <!-- row Subscribe Section -->
 
-	<br>
-
-	<!-- Unpinned Posts -->
-	<div class="album py-5 ">
-		<div class="container">
-			<div class="row">
-
-			{% for post in posts %}
-				{% if not post.pinned and post.published %}
-
-					<div class="col-md-4">
-						<a class="bumblebus-anchor" href="{{ url_for('post', post_id=post.id) }}">
-
-						{% if post.postType == 'blog' %}
-							<div class="card mb-4 box-shadow" style="{{blogpostcolor}}">
-								<img class="card-img-top border-bottom border-secondary" src="{{ url_for('static', filename='blog_pics/' + post.thumbnail) }}" alt="Card image cap" style="height:18rem;">
-						{% else %}
-							<div class="card mb-4 box-shadow"style="{{vlogpostcolor}}">
-								<div class="card-img-top border-bottom border-secondary position-relative" style="height:18rem; background-color: #000;" >
-									<div class="ratio ratio-16x9 position-absolute top-50 start-50 translate-middle" >
-										<iframe class="rounded" src="{{ post.content | safe }}" allowfullscreen></iframe>
-									</div>
-								</div>
-						{% endif %}	
-								<div class="card-body ">
-								{% if post.postType == 'blog' %}
-									<h3 class="card-text text-center">{{ post.title }}</h3>
-									<p class="card-text" >{{ post.summary|striptags|truncate(100) }}</p>
-								{% else %}
-									<h3 class="card-text text-center">{{ post.title }}</h3>
-									<p class="card-text" >{{ post.summary }}</p>
-								{% endif %}
-								</div>
-							</div>
-						</a>
-					</div>
-				{% endif %}
-			{% endfor %}
-				
-			</div>
-		</div>
-	</div> <!-- unpinned posts -->
-
-
 <!-- Flipping Cards -->
-	<div class="album py-5 ">
+	<div class="album mt-5 ">
 		<div class="container">
 			<div class="row">
 
