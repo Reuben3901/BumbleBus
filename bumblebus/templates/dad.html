@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href=" {{ url_for('static', filename='dropzone.css') }} "> 
+<script type="text/javascript" src=" {{ url_for('static', filename='dropzone.js') }}"></script>
+
+<form action="/file-upload" class="dropzone">
+  <div class="fallback">
+    <input name="file" type="file" multiple />
+  </div>
+</form>
+
+<script>
+	$(document).ready(funtion(){
+		$(".dropzone").dropzone({
+			url: '/upload',
+			width: 300,
+			height: 300,
+			progressBarWidth: '100%',
+			maxFileSize: '5MB'
+		})
+	})
+</script>
+
+
+{% endblock %}

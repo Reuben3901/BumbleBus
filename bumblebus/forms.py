@@ -71,4 +71,5 @@ class PostForm(FlaskForm):
 	picture = FileField('Blog Photo', validators=[FileAllowed(['jpg','png'])])
 	pinned = BooleanField('Pinned')
 	published = BooleanField('Published')
+	content_picture = FileField('Content Photo', validators=[FileAllowed(['jpg','png'])])
 	submit = SubmitField('Post')

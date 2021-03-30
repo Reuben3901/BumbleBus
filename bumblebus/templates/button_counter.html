@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<script type="text/javascript">
+		function hello() {
+			document.querySelector('h1').innerHTML = 'Bye';
+			document.querySelector('p').style.color = 'red';
+		}
+
+		document.addEventListener('DOMContentLoaded', function(){
+			document.querySelector('button').onclick = count;
+		})
+
+		let counter = 0;
+
+		function count() {
+			counter++;
+			document.querySelector('#counter').innerHTML = counter;
+
+		}
+
+
+
+	</script>
+
+	
+	<h1 id="counter">0</h1>
+	<button>Click me.</button>
+
+	<h1>Hi.</h1>
+	<p>This is a paragraph.</p>
+
+	<button onclick="hello()">Click me.</button>
+
+
+{% endblock %}

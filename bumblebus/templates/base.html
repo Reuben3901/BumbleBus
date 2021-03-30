@@ -92,20 +92,20 @@
 		{% if current_user.is_authenticated %}
 		<div class="row   align-items-start">
 			<div class="col-auto  ">
-				<div class="row">
+				<div class="row ">
 					<div class="col-auto">
 						<a class="" href="{{ url_for('home') }}">
-							<img class=" " src="{{ url_for('static', filename='assets/' +'skoolie.png') }}" alt="Card image cap" style="height:4rem; width:6rem;">
+							<img class=" " src="{{ url_for('static', filename='assets/' +'logo.png') }}" alt="Card image cap" style="height:10rem; width:11rem;">
 						</a>
 					</div>
-					<div class="col-auto">
-						<a class="bumblebus-anchor" href="{{ url_for('home') }}">
+					<div class="col-auto d-flex align-items-center">
+						<a class="bumblebus-anchor align-middle" href="{{ url_for('home') }}">
 							<h1 class="display-5">BUMBLEBUS: TINY OFF GRID LIVING</h1>
 						</a>
 					</div>
 				</div>
 			</div>
-			<div class="col-auto ms-auto pt-1 ">
+			<div class="col-auto ms-auto pt-1 align-self-center">
 				<a class="btn btn-info m-1" href="{{ url_for('post_new') }}">Create Post</a>
 				<a class="btn btn-info m-1" href="{{ url_for('posts') }}">View Posts</a>
 				<a class="btn btn-danger m-1" href="{{ url_for('logout') }}">Logout</a>
@@ -115,10 +115,10 @@
 				<div class="row">
 					<div class="col-auto">
 						<a class="" href="{{ url_for('home') }}">
-							<img class=" " src="{{ url_for('static', filename='assets/' +'skoolie.png') }}" alt="Card image cap" style="height:4rem; width:6rem;">
+							<img class=" " src="{{ url_for('static', filename='assets/' +'logo.png') }}" alt="Card image cap" style="height:10rem; width:11rem;">
 						</a>
 					</div>
-					<div class="col-auto">
+					<div class="col-auto d-flex align-items-center">
 						<a class="bumblebus-anchor" href="{{ url_for('home') }}">
 							<h1 class="display-5">BUMBLEBUS: TINY OFF GRID LIVING</h1>
 						</a>

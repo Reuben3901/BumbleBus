@@ -39,11 +39,12 @@ class Post(db.Model):
 	thumbnail = db.Column(db.String(20), nullable=False, default='blog_default.jpg')
 	published = db.Column(db.Boolean, nullable=False, default=False)
 
-	photos = db.relationship('Photo', backref='media', lazy=True)
+	posts = db.relationship('Photo', backref='post', lazy=True)
 	
 
 	def __repr__(self):
 		return f"Post('{self.title}','{self.date_posted}')"
+
 
 class Photo(db.Model):
 	# table name is created automatically as "user"
@@ -56,3 +57,4 @@ class Photo(db.Model):
 
 	def __repr__(self):
 		return f"Post('{self.title}','{self.date_posted}')"
+

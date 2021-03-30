@@ -12,6 +12,10 @@ from flask_login import LoginManager
 
 from flaskext.markdown import Markdown
 
+# Flask Database Migration
+from flask_script import Manager
+from flask_migrate import Migrate, MigrateCommand
+
 
 app = Flask(__name__)
 
@@ -35,6 +39,10 @@ login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 
 Markdown(app)
+
+migrate = Migrate(app,db) #Initializing migrate.
+manager = Manager(app)
+manager.add_command('db',MigrateCommand)
 
 from bumblebus import routes
 

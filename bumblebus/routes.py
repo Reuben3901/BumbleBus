@@ -12,7 +12,8 @@ import secrets
 import os
 # resizing the photo
 from PIL import Image
-from flask import abort 
+from flask import abort
+from flask import jsonify, request
 # posts = [
 # 	{
 # 		'author':'Jane Doe',
@@ -273,6 +274,32 @@ def posts():
 	return render_template('posts.html', title="All Posts", posts=posts)
 
 
+
+@app.route("/interaction/")
+def interaction():
+	return render_template('interaction.html', title="All Posts")
+
+
+# https://www.youtube.com/watch?v=vtiiO5I90Tc
 @app.route("/interactive/")
 def interactive():
 	return render_template('interactive.html', title="All Posts")
+
+@app.route("/background_process/")
+def background_process():
+	lang = request.args.get('proglang')
+	if str(lang).lower() == 'python':
+		return jsonify(result='You are wise!')
+	else:
+		return jsonify(result='Try again.')
+
+# https://www.youtube.com/watch?v=vtiiO5I90Tc
+@app.route("/dad/")
+def dad():
+	return render_template('dad.html', title="All Posts")
+
+
+@app.route("/blog_photos_upload", methods=['GET', 'POST'])
+@login_required
+def blog_photos_upload(post_id):
+	post = Post.query.get_or_404(post_id)
