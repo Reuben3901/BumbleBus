@@ -285,6 +285,12 @@ def interaction():
 def interactive():
 	return render_template('interactive.html', title="All Posts")
 
+# https://www.youtube.com/watch?v=0WeFBmvLIGs&ab_channel=Webdev
+@app.route("/nav/")
+def nav():
+	return render_template('nav_slanted.html', title="Nav Slanted")
+
+
 @app.route("/background_process/")
 def background_process():
 	lang = request.args.get('proglang')
@@ -292,6 +298,8 @@ def background_process():
 		return jsonify(result='You are wise!')
 	else:
 		return jsonify(result='Try again.')
+
+
 
 # https://www.youtube.com/watch?v=vtiiO5I90Tc
 @app.route("/dad/")

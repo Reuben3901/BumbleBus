@@ -4,8 +4,8 @@
 
 
 	<div class="row  mx-auto border-0 ">
-		<div class="col-md-7 mt-1 ps-0  " >
-			<div class="container ps-0 pe-0" style="{{vlogpostcolor}} height:100%;" >
+		<div class=" col-md-7 mt-1 ps-0  " >
+			<div class="shadow container ps-0 pe-0" style="{{vlogpostcolor}} height:100%;" >
 				<div class="row d-flex justify-content-center">
 					<div class="col-md-12 align-self-start" style="">	
 						
@@ -35,7 +35,7 @@
 			</div>
 		</div> <!-- Pinned Vlog -->
 
-		<div class="col-md-5 mt-1 " style="{{blogpostcolor}}">
+		<div class="shadow col-md-5 mt-1 " style="{{blogpostcolor}}">
 			<div class="container pe-0" >
 				<div class="row d-flex justify-content-end">
 					<div class="col-md-12 align-self-end" >	
@@ -70,9 +70,11 @@
 	</div> <!-- End Pinned Sections -->
 
 
+	<br>
+
 
 	<!-- Subscribe Bar Section #f5a400 -->	
-	<div class="row mx-auto mt-3 align-items-center" style="background-color: #E1D9CC ;">
+	<div class="shadow row mx-auto mt-3 align-items-center" style="background-color: #E1D9CC ;">
 		
 		<div class="col-auto ms-auto">
 			<h2 class="text-center align-middle">JOIN OUR FREE MONTHLY NEWSLETTER</h2>
@@ -90,6 +92,8 @@
 		</div>
 	</div> <!-- row Subscribe Section -->
 
+	<br>
+
 <!-- Flipping Cards -->
 	<div class="album mt-3 ">
 		<div class="container">
@@ -105,10 +109,10 @@
 
 								<!-- The Front of the Card -->
 							{% if post.postType == 'blog' %}
-								<div class="card mb-4 box-shadow card-front" style="{{blogpostcolor}}">
+								<div class="shadow card mb-4 box-shadow card-front" style="{{blogpostcolor}}">
 									<img class="card-img-top border-bottom border-secondary" src="{{ url_for('static', filename='blog_pics/' + post.thumbnail) }}" alt="Card image cap" style="height:18rem;">
 							{% else %}
-								<div class="card mb-4 box-shadow card-front"style="{{vlogpostcolor}}">
+								<div class="shadow card mb-4 box-shadow card-front"style="{{vlogpostcolor}}">
 									<div class="card-img-top border-bottom border-secondary position-relative" style="height:18rem; background-color: #000;" >
 										<div class="ratio ratio-16x9 position-absolute top-50 start-50 translate-middle" >
 											<iframe class="rounded" src="{{ post.content | safe }}" allowfullscreen></iframe>
@@ -128,9 +132,9 @@
 
 								<!-- The Back of the Card -->
 							{% if post.postType == 'blog' %}
-								<div class="card mb-4 box-shadow card-back position-absolute top-0" style="{{blogpostcolor}} height:100%;">
+								<div class="shadow card mb-4 box-shadow card-back position-absolute top-0" style="{{blogpostcolor}} height:100%;">
 							{% else %}
-								<div class="card mb-4 box-shadow card-back position-absolute top-0"style="{{vlogpostcolor}} height:100%;">
+								<div class="shadow card mb-4 box-shadow card-back position-absolute top-0"style="{{vlogpostcolor}} height:100%;">
 									
 							{% endif %}	
 									<div class="card-body" style="overflow:hidden;">
